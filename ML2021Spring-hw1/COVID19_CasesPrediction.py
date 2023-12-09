@@ -153,8 +153,9 @@ class COVID19Dataset(Dataset):
 ## **DataLoader**
 def prep_dataloader(path, mode, batch_size, n_jobs=0, target_only=False):
     ''' Generates a dataset, then is put into a dataloader. '''
-    dataset = COVID19Dataset(path, mode=mode, target_only=target_only)  # Construct dataset
+    dataset = COVID19Dataset(path, mode=mode, target_only=target_only)  # 构造数据集实例
     dataloader = DataLoader(
+        # 创建了一个torch的DataLoader实例，封装了之前创建的dataset
         dataset, batch_size,
         shuffle=(mode == 'train'), drop_last=False,
         num_workers=n_jobs, pin_memory=True)                # Construct dataloader
