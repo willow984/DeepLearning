@@ -164,32 +164,12 @@ def prep_dataloader(path, mode, batch_size, n_jobs=0, target_only=False):
 
 # **Deep Neural Network**
 
-class NeuralNet(nn.Module):
+class NeuralNet(nn.Module): # nn.Module是pytorch的神经网络基类
     ''' A simple fully-connected deep neural network '''
 
     def __init__(self, input_dim):
         super(NeuralNet, self).__init__()
-
-        # Define your neural network here
-        # TODO: How to modify this model to achieve better performance?
-        #         self.net = nn.Sequential(
-        #             nn.Linear(input_dim, 128),
-        #             nn.ReLU(),
-        #             nn.BatchNorm1d(128),
-        #             nn.Dropout(0.5),
-        #             nn.Linear(128, 64),
-        #             nn.ReLU(),
-        #             nn.BatchNorm1d(64),
-        #             nn.Dropout(0.5),
-        #             nn.Linear(64, 1)
-        #         )
-        self.net = nn.Sequential(
-            nn.Linear(input_dim, 16),
-            nn.BatchNorm1d(16),
-            nn.Dropout(p=0.2),
-            nn.ReLU(),
-            nn.Linear(16, 1)
-        )
+        self.net = nn.Sequential(nn.Linear(input_dim, 16), nn.BatchNorm1d(16), nn.Dropout(p=0.2), nn.ReLU(), nn.Linear(16, 1))
 
         # Mean squared error loss
         self.criterion = nn.MSELoss(reduction='mean')
@@ -225,11 +205,10 @@ class NeuralNet(nn.Module):
 def train(tr_set, dv_set, model, config, device):
     ''' DNN training '''
 
-    n_epochs = config['n_epochs']  # Maximum number of epochs
+    n_epochs = config['n_epochs']  # 最大轮数
 
     # Setup optimizer
-    optimizer = getattr(torch.optim, config['optimizer'])(
-        model.parameters(), **config['optim_hparas'])
+    optimizer = getattr(torch.optim, config['optimizer'])(model.parameters(), **config['optim_hparas'])
 
     min_mse = 1000.
     loss_record = {'train': [], 'dev': []}      # for recording training loss
